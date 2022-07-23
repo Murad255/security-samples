@@ -1,4 +1,4 @@
-package com.example.android.biometricauth
+package com.biometric.fingerprint
 
 enum class FingerprintAuthenticationCallback {
 NOT_INICIALIZED,SUCCESSFUL_RECOGNIZE,FAILED_RECOGNIZE,ERROR_RECOGNIZE

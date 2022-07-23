@@ -30,7 +30,8 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
-import androidx.biometric.BiometricPrompt
+import com.biometric.fingerprint.FingerprintRepo.Companion.DEFAULT_KEY_NAME
+import com.biometric.fingerprint.IFingerprintCallback
 
 /**
  * A dialog that lets users sign in with password.
@@ -41,7 +42,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
     private lateinit var passwordEditText: EditText
     private lateinit var useFingerprintFutureCheckBox: CheckBox
 
-    private lateinit var callback: Callback
+    private lateinit var callback: IFingerprintCallback
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,7 +85,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     }
 
-    fun setCallback(callback: FingerprintAuthenticationDialogFragment.Callback) {
+    fun setCallback(callback: IFingerprintCallback) {
         this.callback = callback
     }
 
@@ -126,8 +127,6 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
         } else false
     }
 
-    interface Callback {
-        fun onPurchased(withBiometrics: Boolean, crypto: BiometricPrompt.CryptoObject? = null)
-        fun createKey(keyName: String, invalidatedByBiometricEnrollment: Boolean = true)
-    }
+
+
 }

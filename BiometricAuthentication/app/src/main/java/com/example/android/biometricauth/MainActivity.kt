@@ -18,12 +18,6 @@ package com.example.android.biometricauth
 
 import android.content.Intent
 import android.os.Bundle
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyPermanentlyInvalidatedException
-import android.security.keystore.KeyProperties
-import android.security.keystore.KeyProperties.BLOCK_MODE_CBC
-import android.security.keystore.KeyProperties.ENCRYPTION_PADDING_PKCS7
-import android.security.keystore.KeyProperties.KEY_ALGORITHM_AES
 import android.util.Base64
 import android.util.Log
 import android.view.Menu
@@ -32,22 +26,9 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import java.io.IOException
-import java.security.InvalidAlgorithmParameterException
-import java.security.InvalidKeyException
-import java.security.KeyStore
-import java.security.KeyStoreException
-import java.security.NoSuchAlgorithmException
-import java.security.NoSuchProviderException
-import java.security.UnrecoverableKeyException
-import java.security.cert.CertificateException
-import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
-import javax.crypto.NoSuchPaddingException
-import javax.crypto.SecretKey
+import com.biometric.fingerprint.FingerprintAuthenticationCallback
+import com.biometric.fingerprint.FingerprintRepo
 
 /**
  * Main entry point for the sample, showing a backpack and "Purchase" button.
@@ -86,8 +67,7 @@ class MainActivity : AppCompatActivity(){
             if(callback == FingerprintAuthenticationCallback.SUCCESSFUL_RECOGNIZE){
                 showConfirmation(fingerprintRepo.EncriptData)
             }
-            if(callback == FingerprintAuthenticationCallback.ERROR_RECOGNIZE||
-                callback == FingerprintAuthenticationCallback.FAILED_RECOGNIZE){
+            if(callback == FingerprintAuthenticationCallback.ERROR_RECOGNIZE){
                 loginWithPassword()
             }
         })

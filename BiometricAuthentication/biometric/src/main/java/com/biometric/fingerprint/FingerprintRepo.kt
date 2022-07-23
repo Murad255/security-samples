@@ -1,9 +1,7 @@
-package com.example.android.biometricauth
+package com.biometric.fingerprint
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
@@ -14,6 +12,7 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
+import com.biometric.R
 import java.io.IOException
 import java.security.*
 import java.security.cert.CertificateException
@@ -22,12 +21,11 @@ import javax.crypto.*
 class FingerprintRepo(private val context: Context,
                       private val biometricPromptFragment: FragmentActivity,
                       private val loginWithPassword: ()->Unit)
-    : FingerprintAuthenticationDialogFragment.Callback{
+    : IFingerprintCallback {
 
 
     private lateinit var keyStore: KeyStore
     private lateinit var keyGenerator: KeyGenerator
-    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var biometricPrompt: BiometricPrompt
 
 
@@ -47,7 +45,7 @@ class FingerprintRepo(private val context: Context,
             return encriptData
         }
 
-
+    // изменяет статус при разблокировке
     var AuthenticationCallback = MutableLiveData<FingerprintAuthenticationCallback>()
 
     init {
@@ -56,12 +54,11 @@ class FingerprintRepo(private val context: Context,
         setupKeyStoreAndKeyGenerator()
 
         setupCiphers()
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         biometricPrompt = createBiometricPrompt()
 
         if (BiometricManager.from(context).canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS)
         {
-            createKey(com.example.android.biometricauth.DEFAULT_KEY_NAME)
+            createKey(DEFAULT_KEY_NAME)
             createKey(KEY_NAME_NOT_INVALIDATED, false)
 
             isHaveFingerprint = true
@@ -126,6 +123,7 @@ class FingerprintRepo(private val context: Context,
      * @return `true` if initialization succeeded, `false` if the lock screen has been disabled or
      * reset after key generation, or if a fingerprint was enrolled after key generation.
      */
+
      private fun initCipher(cipher: Cipher = defaultCipher, keyName: String = DEFAULT_KEY_NAME): Boolean {
         try {
             keyStore.load(null)
@@ -244,7 +242,8 @@ class FingerprintRepo(private val context: Context,
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
                 Log.d(TAG, "Authentication was successful")
-                AuthenticationCallback.value = FingerprintAuthenticationCallback.SUCCESSFUL_RECOGNIZE
+                AuthenticationCallback.value =
+                    FingerprintAuthenticationCallback.SUCCESSFUL_RECOGNIZE
                 onPurchased(true, result.cryptoObject)
             }
         }
@@ -272,5 +271,6 @@ class FingerprintRepo(private val context: Context,
         private const val KEY_NAME_NOT_INVALIDATED = "key_not_invalidated"
         private const val SECRET_MESSAGE = "Very secret message"
         private const val TAG = "FingerprintRepo"
+        const val DEFAULT_KEY_NAME = "DefaultName"
     }
 }
