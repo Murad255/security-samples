@@ -84,7 +84,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     }
 
-    fun setCallback(callback: Callback) {
+    fun setCallback(callback: FingerprintAuthenticationDialogFragment.Callback) {
         this.callback = callback
     }
 

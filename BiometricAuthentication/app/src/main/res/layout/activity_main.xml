@@ -116,10 +116,10 @@
             android:layout_marginTop="@dimen/default_margin"
             android:paddingStart="@dimen/default_padding"
             android:paddingEnd="@dimen/default_padding"
+            android:text="@string/purchase_done"
             android:textAppearance="@android:style/TextAppearance.Material.Body2"
             android:textColor="?android:attr/colorAccent"
-            android:text="@string/purchase_done"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/encrypted_message"
